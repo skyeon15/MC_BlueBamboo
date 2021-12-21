@@ -1,0 +1,8 @@
+name: BlueBamboo
+version: 1.0
+main: net.bbforest.bluebamboo.EKE
+api-version: 1.18
+
+commands:
+  test:
+  test2:
