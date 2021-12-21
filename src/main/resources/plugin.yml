@@ -4,5 +4,15 @@ main: net.bbforest.bluebamboo.EKE
 api-version: 1.18
 
 commands:
-  test:
-  test2:
+  bluebamboo:
+    aliases: [bb]
+    description: 플러그인 기본 명령어
+    usage: /<command>
+  broadcast:
+    aliases: [bc, bbc, 공지]
+    description: 알립니다!
+    usage: /<command> 할말
+  inventory:
+    aliases: [inv, inven, binv, 인벤]
+    description: 인벤토리 스냅샷을 저장합니다.
+    usage: /<command>

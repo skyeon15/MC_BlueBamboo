@@ -1,0 +1,6 @@
+# 인벤토리 스냅샷
+inventory-snapshot:
+  #활성화 여부
+  enabled: true
+  #저장 주기(분)
+  time: 10
