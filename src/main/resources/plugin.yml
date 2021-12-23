@@ -5,14 +5,14 @@ api-version: 1.18
 
 commands:
   bluebamboo:
-    aliases: [bb]
+    aliases: [bb, 파란대나무, 파대]
     description: 플러그인 기본 명령어
-    usage: /<command>
+    usage: /<command> <help|reload>
   broadcast:
     aliases: [bc, bbc, 공지]
     description: 알립니다!
-    usage: /<command> 할말
+    usage: /<command> <할말>
   inventory:
     aliases: [inv, inven, binv, 인벤]
     description: 인벤토리 스냅샷을 저장합니다.
-    usage: /<command>
+    usage: /<command> <save|view> [닉네임] [파일명]

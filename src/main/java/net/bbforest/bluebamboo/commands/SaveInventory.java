@@ -27,16 +27,31 @@ public class SaveInventory implements CommandExecutor, TabCompleter {
     public static HashMap<String, List<String>> files = new HashMap<>();
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
+        //권한 없으면
+        if(!sender.hasPermission("eke.inventory")){
+            Tool.Error.PERM.send(sender);
+            return true;
+        }
         if(args.length == 0){
             return false;
         }
         switch (args[0]){
             case "save" -> {
+                //권한 없으면
+                if(!sender.hasPermission("eke.inventory.save")){
+                    Tool.Error.PERM.send(sender);
+                    return true;
+                }
                 Tool.sendMessage(sender, "인벤토리를 저장합니다.");
                 SaveInventoryTool.saveInventoryData();
+                //SaveInventoryTool.updateList();
             }
             case "view" -> {
+                //권한 없으면
+                if(!sender.hasPermission("eke.inventory.view")){
+                    Tool.Error.PERM.send(sender);
+                    return true;
+                }
                 if(!(sender instanceof Player player)) {    //콘솔인지 확인
                     Tool.sendMessage(sender, "인벤 확인은 플레이어만 사용 가능해요.");
                     return true;
@@ -49,34 +64,40 @@ public class SaveInventory implements CommandExecutor, TabCompleter {
                         return true;
                     }
                     viewInventory(player, new File(EKE.getPlugin().getDataFolder() + "/InventoryData/" + player.getUniqueId()
-                    + "/" + timeStamps.get(timeStamps.size() - 1)));
+                    + "/" + timeStamps.get(timeStamps.size() - 1) + ".yml"));
                 }else if(args.length == 2){
-                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(args[1]));
+                    OfflinePlayer offlinePlayer = Tool.getOfflinePlayer(args[1]);
+                    if(offlinePlayer == null){
+                        Tool.sendMessage(sender, "알 수 없는 플레이어에요.");
+                    }
                     List<String> timeStamps = files.get(offlinePlayer.getUniqueId().toString());
                     if(timeStamps == null || timeStamps.isEmpty()){  //UUID 폴더가 없으면
                         Tool.sendMessage(sender, "저장된 데이터가 없습니다!");
                         return true;
                     }
                     viewInventory(player, new File(EKE.getPlugin().getDataFolder() + "/InventoryData/" + offlinePlayer.getUniqueId()
-                            + "/" + timeStamps.get(timeStamps.size() - 1)));
+                            + "/" + timeStamps.get(timeStamps.size() - 1) + ".yml"));
                 }else if(args.length == 3){
-                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(args[1]));
+                    OfflinePlayer offlinePlayer = Tool.getOfflinePlayer(args[1]);
+                    if(offlinePlayer == null){
+                        Tool.sendMessage(sender, "알 수 없는 플레이어에요.");
+                    }
                     List<String> timeStamps = files.get(offlinePlayer.getUniqueId().toString());
                     if(timeStamps == null || timeStamps.isEmpty()){  //UUID 폴더가 없으면
                         Tool.sendMessage(sender, "저장된 데이터가 없습니다!");
                         return true;
                     }
                     viewInventory(player, new File(EKE.getPlugin().getDataFolder() + "/InventoryData/" + offlinePlayer.getUniqueId()
-                            + "/" + args[2]));
+                            + "/" + args[2] + ".yml"));
                 }
             }
        }
-        return false;
+        return true;
     }
 
     private void viewInventory(Player player, File file){
-        if(!file.exists() || file.isFile()){
-            player.sendMessage("없다");
+        if(!file.exists()){
+            player.sendMessage("파일이 없어요.");
             return;
         }
         String name = file.getName();
@@ -107,6 +128,37 @@ public class SaveInventory implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        return null;
+        //권한 없으면
+        if(!sender.hasPermission("eke.inventory")){
+            return Collections.emptyList();
+        }
+
+        if(args.length == 1){
+            return Arrays.asList("save", "view");
+        }
+        if(args.length == 2){
+            OfflinePlayer[] offlinePlayers = Bukkit.getOfflinePlayers();
+            List<String> list = new ArrayList<>(files.keySet());
+            for(OfflinePlayer offlinePlayer : offlinePlayers){
+                String name = offlinePlayer.getName();
+                if(name != null){
+                    list.add(name);
+                }
+            }
+            return list;
+        }
+        if(args.length == 3){
+            OfflinePlayer offlinePlayer = Tool.getOfflinePlayer(args[1]);
+            if(offlinePlayer == null){
+                return Collections.singletonList("그런 사람은 없어요.");
+            }
+            UUID uuid = offlinePlayer.getUniqueId();
+            List<String> filelist = files.get(uuid.toString());
+            if(filelist == null || filelist.isEmpty()){
+                return Collections.singletonList("그 사람의 데이터가 없어요.");
+            }
+            return filelist;
+        }
+        return Collections.emptyList();
     }
 }
