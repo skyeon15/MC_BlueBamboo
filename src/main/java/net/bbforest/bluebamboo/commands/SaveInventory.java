@@ -1,6 +1,7 @@
 package net.bbforest.bluebamboo.commands;
 
 import net.bbforest.bluebamboo.EKE;
+import net.bbforest.bluebamboo.util.Permission;
 import net.bbforest.bluebamboo.util.SaveInventoryTool;
 import net.bbforest.bluebamboo.util.Tool;
 import net.kyori.adventure.text.Component;
@@ -28,68 +29,61 @@ public class SaveInventory implements CommandExecutor, TabCompleter {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         //권한 없으면
-        if(!sender.hasPermission("eke.inventory")){
-            Tool.Error.PERM.send(sender);
+        if(!Permission.CMD_INVENTORY.hasPerm(sender)){
             return true;
         }
         if(args.length == 0){
             return false;
         }
         switch (args[0]){
-            case "save" -> {
-                //권한 없으면
-                if(!sender.hasPermission("eke.inventory.save")){
-                    Tool.Error.PERM.send(sender);
-                    return true;
-                }
-                Tool.sendMessage(sender, "인벤토리를 저장합니다.");
+            case "save", "s" -> {
+                Tool.sendMessage(sender, "인벤토리를 저장할게요.");
                 SaveInventoryTool.saveInventoryData();
-                //SaveInventoryTool.updateList();
             }
-            case "view" -> {
-                //권한 없으면
-                if(!sender.hasPermission("eke.inventory.view")){
-                    Tool.Error.PERM.send(sender);
-                    return true;
-                }
+            case "view", "v" -> {
                 if(!(sender instanceof Player player)) {    //콘솔인지 확인
-                    Tool.sendMessage(sender, "인벤 확인은 플레이어만 사용 가능해요.");
+                    Tool.sendMessage(sender, "인벤토리 확인은 플레이어만 사용 가능해요.");
                     return true;
                 }
                 if(args.length == 1){
                     String uuid = player.getUniqueId().toString();
                     List<String> timeStamps = files.get(uuid);
                     if(timeStamps == null || timeStamps.isEmpty()){  //UUID 폴더가 없으면
-                        Tool.sendMessage(sender, "저장된 데이터가 없습니다!");
+                        Tool.sendMessage(sender, "저장된 데이터가 없어요!");
                         return true;
                     }
                     viewInventory(player, new File(EKE.getPlugin().getDataFolder() + "/InventoryData/" + player.getUniqueId()
                     + "/" + timeStamps.get(timeStamps.size() - 1) + ".yml"));
+                //닉네임 또는 UUID 입력 될 때
                 }else if(args.length == 2){
-                    OfflinePlayer offlinePlayer = Tool.getOfflinePlayer(args[1]);
+                    OfflinePlayer offlinePlayer = Tool.getOfflinePlayerUUID(args[1]);
                     if(offlinePlayer == null){
                         Tool.sendMessage(sender, "알 수 없는 플레이어에요.");
                     }
                     List<String> timeStamps = files.get(offlinePlayer.getUniqueId().toString());
                     if(timeStamps == null || timeStamps.isEmpty()){  //UUID 폴더가 없으면
-                        Tool.sendMessage(sender, "저장된 데이터가 없습니다!");
+                        Tool.sendMessage(sender, "저장된 데이터가 없어요!");
                         return true;
                     }
                     viewInventory(player, new File(EKE.getPlugin().getDataFolder() + "/InventoryData/" + offlinePlayer.getUniqueId()
                             + "/" + timeStamps.get(timeStamps.size() - 1) + ".yml"));
+                //날짜 입력될 때
                 }else if(args.length == 3){
-                    OfflinePlayer offlinePlayer = Tool.getOfflinePlayer(args[1]);
+                    OfflinePlayer offlinePlayer = Tool.getOfflinePlayerUUID(args[1]);
                     if(offlinePlayer == null){
                         Tool.sendMessage(sender, "알 수 없는 플레이어에요.");
                     }
                     List<String> timeStamps = files.get(offlinePlayer.getUniqueId().toString());
                     if(timeStamps == null || timeStamps.isEmpty()){  //UUID 폴더가 없으면
-                        Tool.sendMessage(sender, "저장된 데이터가 없습니다!");
+                        Tool.sendMessage(sender, "저장된 데이터가 없어요!");
                         return true;
                     }
                     viewInventory(player, new File(EKE.getPlugin().getDataFolder() + "/InventoryData/" + offlinePlayer.getUniqueId()
                             + "/" + args[2] + ".yml"));
                 }
+            }
+            default -> {
+                return false;
             }
        }
         return true;
@@ -125,11 +119,10 @@ public class SaveInventory implements CommandExecutor, TabCompleter {
         player.openInventory(inventory);
     }
 
-
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         //권한 없으면
-        if(!sender.hasPermission("eke.inventory")){
+        if(!sender.hasPermission("bluebamboo.inventory")){
             return Collections.emptyList();
         }
 
@@ -148,7 +141,7 @@ public class SaveInventory implements CommandExecutor, TabCompleter {
             return list;
         }
         if(args.length == 3){
-            OfflinePlayer offlinePlayer = Tool.getOfflinePlayer(args[1]);
+            OfflinePlayer offlinePlayer = Tool.getOfflinePlayerUUID(args[1]);
             if(offlinePlayer == null){
                 return Collections.singletonList("그런 사람은 없어요.");
             }

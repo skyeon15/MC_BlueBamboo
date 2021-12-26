@@ -6,10 +6,8 @@ import net.bbforest.bluebamboo.commands.SaveInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +37,7 @@ public class Tool {
      * @param msg 메시지 내용
      */
     public static void sendMessage(CommandSender sender, String msg){
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f[&b파란대나무&f] " + msg));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&r[&b파란대나무&r] " + msg));
     }
 
     /**
@@ -47,7 +45,7 @@ public class Tool {
      * @param msg 메시지 내용
      */
     public static void sendMessageOri(CommandSender sender, String msg){
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', (sender instanceof Player ? "" : "파란대나무") + msg));
     }
 
     /**
@@ -55,17 +53,16 @@ public class Tool {
      * <p>INFO : 정보</p>
      * <p>WARN : 경고</p>
      * <p>ERROR : 오류</p>
-     * <p>SEVERE : 극심한</p>
      */
     public enum Log{
-        INFO, WARN, ERROR, SEVERE;
+        MSG, INFO, WARN, ERROR;
         public void send(String msg){
-            sendMessage(Bukkit.getConsoleSender(), msg);
             Logger logger = EKE.getPlugin().getLogger();
             switch(this){
+                case MSG -> sendMessage(Bukkit.getConsoleSender(), msg);
                 case INFO -> logger.info(msg);
                 case WARN -> logger.warning(msg);
-                case SEVERE -> logger.severe(msg);
+                case ERROR -> logger.severe(msg);
             }
         }
     }
@@ -89,7 +86,7 @@ public class Tool {
      * @param input 닉네임
      */
     @Nullable
-    public static OfflinePlayer getOfflinePlayer(@NotNull String input){
+    public static OfflinePlayer getOfflinePlayerUUID(@NotNull String input){
         if(isUUID(input)){
             return Bukkit.getOfflinePlayer(UUID.fromString(input));
         }

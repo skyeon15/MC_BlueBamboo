@@ -16,7 +16,7 @@ public class EKE extends JavaPlugin {
 
     public void onEnable() {
         plugin = this;
-        Bukkit.getConsoleSender().sendMessage("§b파란대나무 활성화!");
+        Tool.Log.MSG.send("파란대나무숲에 들어왔어요!");
         registerConfig();
         //명령어 등록 호출
         Tool.registerCommands();
@@ -24,7 +24,7 @@ public class EKE extends JavaPlugin {
     }
 
     public void onDisable() {
-        Bukkit.getConsoleSender().sendMessage("§b파란대나무 활성화!");
+        Tool.Log.MSG.send("파란대나무숲에서 나갔어요...");
     }
 
     public void registerConfig(){
