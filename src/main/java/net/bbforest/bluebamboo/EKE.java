@@ -1,7 +1,9 @@
 package net.bbforest.bluebamboo;
+import net.bbforest.bluebamboo.listener.EventPlayerCommand;
 import net.bbforest.bluebamboo.util.SaveInventoryTool;
 import net.bbforest.bluebamboo.util.Tool;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -21,6 +23,10 @@ public class EKE extends JavaPlugin {
         //명령어 등록 호출
         Tool.registerCommands();
         SaveInventoryTool.autoSaveInventoryData();
+
+        //이벤트 리스너 등록
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        pluginManager.registerEvents(new EventPlayerCommand(), this);
     }
 
     public void onDisable() {
