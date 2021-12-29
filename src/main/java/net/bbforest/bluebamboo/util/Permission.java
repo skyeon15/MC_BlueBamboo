@@ -22,6 +22,9 @@ public enum Permission {
     }
 
     public boolean hasPerm(@NotNull CommandSender sender, boolean sendFeedback) {
+        //관리자 권한이 있으면 권한 확인 넘기기
+        if (sender.hasPermission(Permission.ADMIN.permission)) return true;
+
         boolean has = sender.hasPermission(permission);
         //권한이 없고 피드백이 있으면
         if (!has && sendFeedback) {
