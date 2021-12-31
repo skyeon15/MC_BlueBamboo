@@ -7,6 +7,7 @@ public enum Permission {
     ADMIN("admin"),
     CMD_RELOAD("reload"),
     CMD_BROADCAST("broadcast"),
+    CMD_BROADCASTSET("broadcast.set"),
     CMD_INVENTORY("inventory"),
     COLOR("color"),
     ;

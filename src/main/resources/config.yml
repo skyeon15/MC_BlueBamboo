@@ -10,3 +10,5 @@ blockPluginCommand:
   enabled: false
   #방지할 플러그인 목록
   list: [list1, list2, list3]
+#공지 접두사 설정
+broadcast-prefix: "[&b공지&r] "
