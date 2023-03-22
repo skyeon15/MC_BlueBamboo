@@ -2,19 +2,23 @@ package net.bbforest.bluebamboo;
 import net.bbforest.bluebamboo.listener.EventPlayerCommand;
 import net.bbforest.bluebamboo.util.SaveInventoryTool;
 import net.bbforest.bluebamboo.util.Tool;
+import net.bbforest.bluebamboo.util.Updater;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import org.eclipse.jetty.server.Server;
 
 public class EKE extends JavaPlugin {
 
     private static EKE plugin;
+    private static File file;
 
     public static EKE getPlugin(){
         return plugin;
     }
+    public static File getPluginFile() {return file;}
 
     public void onEnable() {
         plugin = this;
@@ -27,10 +31,17 @@ public class EKE extends JavaPlugin {
         //이벤트 리스너 등록
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new EventPlayerCommand(), this);
+
+        file = this.getFile();
+        Updater.onEnable();
+
+        MyHttpHandler.init();
     }
+
 
     public void onDisable() {
         Tool.Log.MSG.send("파란대나무숲에서 나갔어요...");
+        Updater.onDisable();
     }
 
     public void registerConfig(){
@@ -41,3 +52,4 @@ public class EKE extends JavaPlugin {
         }
     }
 }
+

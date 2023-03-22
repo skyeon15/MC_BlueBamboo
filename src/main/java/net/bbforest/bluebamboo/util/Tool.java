@@ -2,6 +2,7 @@ package net.bbforest.bluebamboo.util;
 import net.bbforest.bluebamboo.EKE;
 import net.bbforest.bluebamboo.commands.BlueBamboo;
 import net.bbforest.bluebamboo.commands.Broadcast;
+import net.bbforest.bluebamboo.commands.Motd;
 import net.bbforest.bluebamboo.commands.SaveInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,6 +21,7 @@ public class Tool {
         registerCommand("bluebamboo", new BlueBamboo());
         registerCommand("broadcast", new Broadcast());
         registerCommand("inventory", new SaveInventory());
+        registerCommand("motd", new Motd());
     }
     private static void registerCommand(String cmd, Object object){
         PluginCommand command = EKE.getPlugin().getCommand(cmd);

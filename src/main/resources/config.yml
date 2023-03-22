@@ -4,11 +4,20 @@ inventory-snapshot:
   enabled: true
   #저장 주기(분)
   time: 10
+
 #특정 플러그인 명령어 방지
 blockPluginCommand:
   #활성화 여부
   enabled: false
   #방지할 플러그인 목록
   list: [list1, list2, list3]
+
 #공지 접두사 설정
 broadcast-prefix: "[&b공지&r] "
+
+#플러그인 업데이트
+update:
+  #자동 업데이트
+  auto: false
+  #업데이트 채널(release, dev)
+  channel: "dev"

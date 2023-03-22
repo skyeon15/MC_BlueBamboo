@@ -10,6 +10,7 @@ public enum Permission {
     CMD_BROADCASTSET("broadcast.set"),
     CMD_INVENTORY("inventory"),
     COLOR("color"),
+    CMD_MOTD("motd"),
     ;
 
     private final String permission;

@@ -1,5 +1,5 @@
 name: BlueBamboo
-version: 1.0
+version: 1.0-dev
 main: net.bbforest.bluebamboo.EKE
 api-version: 1.18
 
@@ -14,5 +14,9 @@ commands:
     usage: /<command> <할말>
   inventory:
     aliases: [inv, inven, binv, 인벤]
-    description: 인벤토리 스냅샷을 저장합니다.
+    description: 인벤토리 스냅샷을 저장해요.
     usage: /<command> <save|view> [닉네임] [파일명]
+  motd:
+    aliases: [bmotd, serverstatus, bstatus]
+    description: 서버 환영 메시지를 수정해요.
+    usage: /<command> <메시지>
